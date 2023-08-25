@@ -4,7 +4,12 @@
     <title>Dashboard</title>
 </head>
 <body>
-    <h1>Max Temperature: {{ data.temperature_max }}</h1>
-    <h1>Min Temperature: {{ data.temperature_min }}</h1>
+    <h1>The current tempurature feels like: {{ feels_like }}°C </h1>
+
+    <p> 
+        The weather details are being shown for the location: {{ data.location.name }} <br> <br> 
+
+        The Wind is currently blowing at {{ data.current.wind_kph }}kph to the {{ direction }}!
+    </p>
 </body>
 </html>

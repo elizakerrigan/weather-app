@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return 'Hello, World!'
+    return render_template('index.html')
 
 @app.route ('/about')
 def about():
@@ -12,10 +12,40 @@ def about():
 
 @app.route ('/dashboard')
 def dashboard():
-    response = requests.get('https://api.open-meteo.com/v1/forecast?latitude=-27.4679&longitude=153.0281&daily=temperature_2m_max,temperature_2m_min&timezone=Australia%2FSydney')
-    myData = response.json()
-    print(myData)
-    return render_template('dashboard.html', data=myData)
+    response = requests.get('http://api.weatherapi.com/v1/current.json?key=f35d9a3424a448acb3874227232208&q=Brisbane&aqi=no')
+    myData = response.json()    
+    #print(myData)
+    feels_like = myData['current']['feelslike_c']
+    direction = myData['current']['wind_dir']
+
+    match direction: 
+        case "N":
+            direction = "North"
+        case "NE":
+            direction = "North East"
+        case "NNE":
+            direction = "North North East"
+        case "E": 
+            direction = "East"
+        case "SE":
+            direction = "South East"
+        case "SSE": 
+            direction = "South South East"
+        case "S": 
+            direction = "South"
+        case "SW":
+            direction = "South West"
+        case "SSW":
+            direction = "South South West"
+        case "W":
+            direction = "West"
+        case "NW":
+            direction = "North West"
+        case "NNW":
+            direction = "North North West"
+        case _:
+            direction = direction
+    return render_template('dashboard.html', data=myData, feels_like=feels_like, direction=direction)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
